@@ -1,0 +1,32 @@
+# Easy Admin Configuration
+easy_admin:
+    site_name: '<i>Acseo</i>'
+    entities:
+        Contact:
+            class: AppBundle\Entity\Contact
+            list:
+                help: 'Récent contact messages !!'
+                actions:
+                    - { name: 'show', icon: 'search-plus', label: '' }
+                    - { name: 'delete', icon: 'trash', label: '' }
+                    - { name: '-edit' }
+                fields:
+                    - 'name'
+                    - 'email'
+                    - 'question'
+                    - 'treated'
+            disabled_actions: ['new']
+            show:
+                actions:
+                   - { name: '-edit' }
+                fields:
+                    - 'name'
+                    - 'email'
+                    - 'question'
+                    - 'treated'
+
+# Doctrine Extensions Configuration
+stof_doctrine_extensions:
+    orm:
+        default:
+            timestampable:  true

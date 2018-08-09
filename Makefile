@@ -44,7 +44,7 @@ db-fixtures:    ## Load fixtures
 ##---------------------------------------------------------------------------
 
 config:         ## Init files required
-config: .env docker-compose.override.yml
+config: .env docker-compose.override.yml .git/hooks/pre-commit
 	@echo 'Configuration files copied'
 .env: .env.dist
 	@echo "Copying environment variables"
@@ -60,3 +60,8 @@ vendor: symfony/composer.json
 assets:
 	@echo   "assets install"
 	@$(CONSOLE) assets:install --symlink
+
+.git/hooks/pre-commit: docker/git/pre-commit
+	@echo "Copying git hooks"
+	@cp docker/git/pre-commit .git/hooks/pre-commit
+	@chmod +x .git/hooks/pre-commit
