@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+
+    nginx:
+        ports:
+            - "80:80"
+        tty: true
+
+    mysql:
+        ports:
+            - "3306:3306"
+        tty: true
+
+    phpmyadmin:
+        ports:
+            - "8080:80"

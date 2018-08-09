@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+
+    php:
+        build: docker/php
+        volumes:
+            - "./symfony:/symfony"
+        depends_on:
+            - mysql
+
+    nginx:
+        build: docker/nginx
+        tty: true
+        depends_on:
+            - php
+
+    mysql:
+        tty: true
+        build: docker/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - mysql:db
+        volumes:
+            - ${SYMFONY_APP_PATH}/docker/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+        environment:
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            PMA_HOST: mysql
+            PMA_ARBITRARY: 1
