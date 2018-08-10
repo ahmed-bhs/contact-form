@@ -1,3 +1,4 @@
+include .env
 DC=docker-compose
 EXEC=$(DC) exec
 CONSOLE=$(EXEC) php bin/console
@@ -9,7 +10,7 @@ ENV?=dev
 ##########################################################################
 
 start:          ## Install and start the project
-start: config build up vendor db-fixtures
+start: config build up db-migrate db-fixtures vendor
 up:
 	@$(DC) up --build -d --remove-orphans
 stop:
@@ -21,6 +22,8 @@ down:
 
 bash:
 	docker-compose exec php bash
+mysql:
+	$(EXEC) mysql mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}"
 
 ##########################################################################
 
@@ -36,7 +39,7 @@ db-migrate:     ## Launch doctrine migrations
 	@$(CONSOLE) doctrine:migrations:migrate $(VERSION) --no-interaction --env $(ENV)
 
 db-fixtures:    ## Load fixtures
-	@$(CONSOLE) doctrine:fixtures:load -q --env $(ENV)
+	@$(CONSOLE) doctrine:fixtures:load --no-interaction --env $(ENV)
 
 
 ##
@@ -61,7 +64,7 @@ assets:
 	@echo   "assets install"
 	@$(CONSOLE) assets:install --symlink
 
-.git/hooks/pre-commit: docker/git/pre-commit
+.git/hooks/pre-commit:
 	@echo "Copying git hooks"
 	@cp docker/git/pre-commit .git/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit

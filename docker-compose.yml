@@ -12,12 +12,13 @@ services:
     nginx:
         build: docker/nginx
         tty: true
+        volumes_from: [php]
         depends_on:
             - php
 
     mysql:
-        tty: true
         build: docker/mysql
+        tty: true
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_USER: ${MYSQL_USER}
